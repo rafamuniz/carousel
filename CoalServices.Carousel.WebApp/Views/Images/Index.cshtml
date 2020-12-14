@@ -1,0 +1,66 @@
+﻿
+@model IEnumerable<CoalServices.Carousel.Models.ImageInfoModel>
+
+@{
+    ViewData["Title"] = "Image";
+}
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 text-right">
+            <a class="btn btn-primary" href="/images/add" role="button">Add</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+            @if (Model != null)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Image
+                            </th>
+                            <th>
+                                FileName
+                            </th>
+                            <th>
+                                Extension
+                            </th>
+                            <th>
+                                Content Type
+                            </th>
+                            <th>
+                                Size
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <img src="@item.ContentBase64" class="listing__image">
+                                </td>
+
+                                <td>
+                                    @item.FileName
+                                </td>
+                                <td>
+                                    @item.FileExtension
+                                </td>
+                                <td>
+                                    @item.ContentType
+                                </td>
+                                <td>
+                                    @item.FileSize
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>

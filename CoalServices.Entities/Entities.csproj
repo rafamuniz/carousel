@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>Entities</AssemblyName>
+    <RootNamespace>CoalServices.Carousel.Entities</RootNamespace>
+  </PropertyGroup>
+
+</Project>

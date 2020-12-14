@@ -1,0 +1,17 @@
+.vs
+*.user
+
+CoalServices.Carousel.Models/bin
+CoalServices.Carousel.Models/obj
+
+CoalServices.Carousel.Services/bin
+CoalServices.Carousel.Services/obj
+
+CoalServices.Carousel.WebApp/bin
+CoalServices.Carousel.WebApp/obj
+
+CoalServices.Entities/bin
+CoalServices.Entities/obj
+
+CoalServices.Persistence/bin
+CoalServices.Persistence/obj
