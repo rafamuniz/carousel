@@ -20,8 +20,14 @@ namespace WebApplication3.Controllers
         public IActionResult Index()
         {
             _logger.LogInformation("Getting images");
-            var images = _imageService.GetImages();
-            return View(images);
+            var result = _imageService.GetImages();
+
+            if (result.IsSuccessful)
+            {
+                return View(result.Data);
+            }
+
+            return View(new ErrorViewModel { Message = result.ErrorMessage });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

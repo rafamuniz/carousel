@@ -1,13 +1,10 @@
-﻿using AutoMapper;
-using CoalServices.Carousel.Entities;
-using CoalServices.Carousel.Models;
-using CoalServices.Carousel.Persistence;
+﻿using CoalServices.Carousel.Models;
 using CoalServices.Carousel.Services;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using WebApplication3.Models;
 
@@ -28,8 +25,15 @@ namespace WebApplication3.Controllers
 
         public IActionResult Index()
         {
-            var images = _imageService.GetImages();
-            return View(images);
+            _logger.LogInformation("Getting images");
+            var result = _imageService.GetImages();
+
+            if (result.IsSuccessful)
+            {
+                return View(result.Data);
+            }
+
+            return View(new ErrorViewModel { Message = result.ErrorMessage });
         }
 
         public IActionResult Add()
@@ -41,16 +45,20 @@ namespace WebApplication3.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(ImageAddModel model)
         {
+            _logger.LogInformation("Validating ");
             if (ModelState.IsValid)
             {
+                _logger.LogInformation("Adding image");
                 var result = await _imageService.AddImageAsync(model);
 
                 if (result.IsSuccessful)
                 {
+                    _logger.LogInformation("Image added");
                     return RedirectToAction("Index", "Images");
                 }
 
-                model.Message = result.ErrorMessage;
+                _logger.LogInformation("Error adding image");
+                ModelState.AddModelError("Image", String.Join(", ", result.ErrorMessages.ToArray()));
             }
 
             return View(model);
@@ -66,7 +74,7 @@ namespace WebApplication3.Controllers
                 return RedirectToAction("Index", "Images");
             }
 
-            return View();
+            return View(new ErrorViewModel { Message = result.ErrorMessage });
         }
 
         public IActionResult Gets()

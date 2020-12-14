@@ -12,13 +12,13 @@ namespace CoalServices.Carousel.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>        
-        Task<(ImageInfoModel Data, Boolean IsSuccessful, String ErrorMessage)> AddImageAsync(ImageAddModel model);
+        Task<(ImageInfoModel Data, Boolean IsSuccessful, IList<String> ErrorMessages)> AddImageAsync(ImageAddModel model);
 
         /// <summary>
         ///     Get images
         /// </summary>        
         /// <returns></returns>
-        IEnumerable<ImageInfoModel> GetImages();
+        (IEnumerable<ImageInfoModel> Data, Boolean IsSuccessful, String ErrorMessage) GetImages();
 
         /// <summary>
         ///     Get images

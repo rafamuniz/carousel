@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CoalServices.Carousel.Models
@@ -10,6 +11,6 @@ namespace CoalServices.Carousel.Models
         [Display(Name = "Image")]
         public IFormFile Image { get; set; }
 
-        public String Message{ get; set; }
+        public IList<String> Messages { get; set; }
     }
 }

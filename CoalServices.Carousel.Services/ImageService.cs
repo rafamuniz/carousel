@@ -3,9 +3,11 @@ using CoalServices.Carousel.Entities;
 using CoalServices.Carousel.Models;
 using CoalServices.Carousel.Persistence;
 using CoalServices.Carousel.Services.Extensions;
+using CoalServices.Carousel.Services.Validations;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CoalServices.Carousel.Services
@@ -28,11 +30,16 @@ namespace CoalServices.Carousel.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<(ImageInfoModel Data, Boolean IsSuccessful, String ErrorMessage)> AddImageAsync(ImageAddModel model)
+        public async Task<(ImageInfoModel Data, Boolean IsSuccessful, IList<String> ErrorMessages)> AddImageAsync(ImageAddModel model)
         {
             try
             {
-                // Validate business rule
+                if (!model.Validate<ImageAddModelValidator, ImageAddModel>().IsValid)
+                {
+                    var validations = model.Validate<ImageAddModelValidator, ImageAddModel>();
+
+                    return (null, false, validations.ToList());
+                }
 
                 var image = _mapper.Map<ImageAddModel, Image>(model);
 
@@ -51,7 +58,7 @@ namespace CoalServices.Carousel.Services
             }
             catch (Exception ex)
             {
-                return (null, true, ex.Message);
+                return (null, false, new List<String>() { ex.Message });
             }
         }
 
@@ -59,11 +66,20 @@ namespace CoalServices.Carousel.Services
         ///     Get images
         /// </summary>        
         /// <returns></returns>
-        public IEnumerable<ImageInfoModel> GetImages()
+        public (IEnumerable<ImageInfoModel> Data, Boolean IsSuccessful, String ErrorMessage) GetImages()
         {
-            var images = _unitOfWork.ImageRepository.GetImages();
+            try
+            {
+                var images = _unitOfWork.ImageRepository.GetImages();
 
-            return _mapper.Map<IEnumerable<Image>, IEnumerable<ImageInfoModel>>(images);
+                var models = _mapper.Map<IEnumerable<Image>, IEnumerable<ImageInfoModel>>(images);
+
+                return (models, true, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, false, ex.Message);
+            }
         }
 
         /// <summary>
